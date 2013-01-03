@@ -40,8 +40,7 @@ class RSS extends Plugin {
 		$link = $channel->addChild( 'link', Site::get_url('habari') );
 		$tagline = Options::get( 'tagline', '' );		// get the tagline or an empty string if it doesn't exist - the description tag is required
 		$description = $channel->addChild( 'description', htmlspecialchars( $tagline ) );
-// 		$pubDate = $channel->addChild( 'lastBuildDate', date( DATE_RFC822, strtotime( Post::get()->pubdate ) ) );
-		$pubDate = $channel->addChild( 'lastBuildDate', date( 'r', Post::get()->pubdate->int ) );
+		$pubDate = $channel->addChild( 'lastBuildDate', Post::get()->pubdate->format( DATE_RSS ) );
 		$generator = $channel->addChild( 'generator', 'Habari ' . Version::get_habariversion() . ' http://habariproject.org/' );
 
 		Plugins::act( 'rss_create_wrapper', $xml );
@@ -63,8 +62,7 @@ class RSS extends Plugin {
 				$title = $item->addChild( 'title', htmlspecialchars( $post->title ) );
 				$link = $item->addChild( 'link', $post->permalink );
 				$description = $item->addChild( 'description', htmlspecialchars( $post->content ) );
-// 				$pubdate = $item->addChild ( 'pubDate', date( DATE_RFC822, strtotime( $post->pubdate ) ) );
-				$pubdate = $item->addChild ( 'pubDate', date( 'r', $post->pubdate->int ) );
+				$pubdate = $item->addChild ( 'pubDate', $post->pubdate->format( DATE_RSS ) );
 				$guid = $item->addChild( 'guid', $post->guid );
 				$guid->addAttribute( 'isPermaLink', 'false' );
 				Plugins::act( 'rss_add_post', $item, $post );
@@ -87,7 +85,7 @@ class RSS extends Plugin {
 			$title = $item->addChild( 'title', htmlspecialchars( sprintf( _t( '%1$s on "%2$s"' ), $comment->name, $comment->post->title ) ) );
 			$link = $item->addChild( 'link', $comment->post->permalink );
 			$description = $item->addChild( 'description', htmlspecialchars( $comment->content ) );
-			$pubdate = $item->addChild ( 'pubDate', date( DATE_RFC822, strtotime( $comment->date ) ) );
+			$pubdate = $item->addChild ( 'pubDate', $comment->date->format( DATE_RSS ) );
 			$guid = $item->addChild( 'guid', $comment->post->guid . '/' . $comment->id );
 			$guid->addAttribute( 'isPermaLink', 'false' );
 			Plugins::act( 'rss_add_comment', $item, $comment );
