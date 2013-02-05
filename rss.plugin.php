@@ -62,7 +62,7 @@ class RSS extends Plugin {
 				$item = $items->addChild( 'item' );
 				$title = $item->addChild( 'title', htmlspecialchars( $post->title ) );
 				$link = $item->addChild( 'link', $post->permalink );
-				$description = $item->addChild( 'description', htmlspecialchars( $post->content ) );
+				$description = $item->addChild( 'description', htmlspecialchars( $post->content_out ) );
 // 				$pubdate = $item->addChild ( 'pubDate', date( DATE_RFC822, strtotime( $post->pubdate ) ) );
 				$pubdate = $item->addChild ( 'pubDate', date( 'r', $post->pubdate->int ) );
 				$guid = $item->addChild( 'guid', $post->guid );
